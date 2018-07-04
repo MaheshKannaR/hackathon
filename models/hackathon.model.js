@@ -5,10 +5,13 @@ var mongoosePaginate = require('mongoose-paginate')
 var HackathonSchema = new mongoose.Schema({
     title: String,
     description: String,
-    date: Date,
     status: String,
     org: String,
-    organizer: String
+    organiser: String,
+    teamsize: String,
+    startDate: String,
+    endDate: String,
+    mob: String
 })
 
 HackathonSchema.plugin(mongoosePaginate)

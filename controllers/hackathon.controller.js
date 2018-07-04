@@ -4,6 +4,11 @@ var HackathonService = require('../services/hackathon.service')
 
 _this = this
 
+function parseDate(input) {
+    var parts = input.split('-');
+    // new Date(year, month [, day [, hours[, minutes[, seconds[, ms]]]]])
+    return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
+  }
 
 // Async Controller function to get the To do List
 
@@ -16,7 +21,27 @@ exports.getHackathons = async function(req, res, next){
 
     try{
     
-        var hackathons = await HackathonService.getHackathons({}, page, limit)
+        var hackathons = await HackathonService.getHackathons({}, page, limit);
+
+        for(var i=0;i<hackathons.docs.length;i++){
+            console.log(hackathons.docs[i].endDate);
+            console.log(parseDate(hackathons.docs[i].endDate));
+            var endDate = parseDate(hackathons.docs[i].endDate);
+            var startDate = parseDate(hackathons.docs[i].startDate);
+            var currentDate = new Date();
+            if(endDate >= currentDate && startDate <= currentDate){
+                hackathons.docs[i].status = "1";
+                //activ
+            }
+            else if(startDate > currentDate){
+                hackathons.docs[i].status = "3";
+                //comming soon
+            }
+            else{
+                hackathons.docs[i].status = "2";
+                //completed
+            }
+        }
         
         // Return the todos list with the appropriate HTTP Status Code and Message.
         
@@ -41,7 +66,10 @@ exports.createHackathon = async function(req, res, next){
         date: req.body.date,
         status: req.body.status,
         org: req.body.org,
-        organizer: req.body.organizer
+        organiser: req.body.organiser,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        mob: req.body.mob
     }
 
     try{

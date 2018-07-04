@@ -37,7 +37,10 @@ exports.createHackathon = async function(hackathon){
         date: hackathon.date,
         status: hackathon.status,
         org: hackathon.org,
-        organizer: hackathon.organizer
+        organiser: hackathon.organiser,
+        startDate: hackathon.startDate,
+        endDate: hackathon.endDate,
+        mob: hackathon.mob
     })
 
     try{
